@@ -1,27 +1,35 @@
 package vtb.courses.stage2;
 
 import lombok.Getter;
+import lombok.ToString;
 
+import java.io.InvalidClassException;
 import java.util.Stack;
 import java.util.function.Consumer;
 
-public class Account {
+@ToString
+public class Account implements Savable {
     @Getter
     protected String owner;
     private SubAccounts byCurrency;
-
-    private Stack<Consumer<Account>> undoList;
+    @ToString.Exclude
+    private transient Stack<Consumer<Account>> undoList;
 
     public Account(String owner) {
+        setOwner(owner);
         byCurrency = new SubAccounts();
         byCurrency.put(Currency.RUB, Integer.valueOf(0));
         undoList = new Stack<>();
-        setOwner(owner);
+    }
+
+    public Account(Account account) {
+        this(account.owner);
+        account.byCurrency.forEach((currency, integer) -> this.byCurrency.put(currency, integer));
     }
 
     public void undo(){
         if (undoList.empty()) {
-            throw new IllegalStateException("Нет изменений к откату!");
+            throw new IllegalStateException("Нечего откатывать!");
         }
         undoList.pop().accept(this);
     }
@@ -52,15 +60,25 @@ public class Account {
         } else {
             undoList.push(x -> x.byCurrency.remove(currency));
         }
-
-
         byCurrency.put(currency, amount);
     }
+
     @Override
-    public String toString() {
-        return "Account{" +
-                "owner='" + owner + '\'' +
-                ", byCurrency=" + byCurrency +
-                '}';
+    public Object getSave() {
+        return new Account(this);
     }
+
+    @Override
+    public void restoreSave(Object save) throws InvalidClassException {
+        if (save instanceof Account) {
+            Account savedAccount = (Account) save;
+
+            this.owner = savedAccount.owner;
+            this.byCurrency = savedAccount.byCurrency;
+            this.undoList.clear();
+        } else {
+            throw new InvalidClassException("Не могу восстановить состояние из класса " + save.getClass().getName());
+        }
+    }
+
 }

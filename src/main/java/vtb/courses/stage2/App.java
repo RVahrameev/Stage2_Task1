@@ -1,6 +1,8 @@
 package vtb.courses.stage2;
 
+import javax.imageio.IIOException;
 import javax.print.AttributeException;
+import java.io.*;
 
 /**
  * Hello world!
@@ -11,6 +13,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+
 
         for (Currency currency: Currency.values())
             System.out.println(currency);
