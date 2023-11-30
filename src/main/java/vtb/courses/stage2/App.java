@@ -11,6 +11,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+
         for (Currency currency: Currency.values())
             System.out.println(currency);
         Account account = new Account("Вахрамеев");
@@ -22,6 +23,14 @@ public class App
         account.setAmount(Currency.EUR, 100);
         account.setAmount(Currency.RUB, 200);
         System.out.println(account);
-        account.setAmount(Currency.USD, -200);
+        account.setOwner("Новый владелец");
+        System.out.println(account);
+        account.undo();
+        System.out.println(account);
+        account.undo();
+        System.out.println(account);
+        account.undo();
+        System.out.println(account);
+        account.undo();
     }
 }
