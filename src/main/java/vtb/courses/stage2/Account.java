@@ -15,18 +15,18 @@ public class Account implements Savable {
     private SubAccounts byCurrency;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private transient Stack<Consumer<Account>> undoList;
+    private final transient Stack<Consumer<Account>> undoList;
 
     public Account(String owner) {
         setOwner(owner);
         byCurrency = new SubAccounts();
-        byCurrency.put(Currency.RUB, Integer.valueOf(0));
+        byCurrency.put(Currency.RUB, 0);
         undoList = new Stack<>();
     }
 
     public Account(Account account) {
         this(account.owner);
-        account.byCurrency.forEach((currency, integer) -> this.byCurrency.put(currency, integer));
+        this.byCurrency.putAll(account.byCurrency);
     }
 
     public void undo(){
@@ -34,6 +34,10 @@ public class Account implements Savable {
             throw new IllegalStateException("Нечего откатывать!");
         }
        undoList.pop().accept(this);
+    }
+
+    public boolean undoAvailable() {
+        return !undoList.empty();
     }
 
     public void setOwner(String owner) {

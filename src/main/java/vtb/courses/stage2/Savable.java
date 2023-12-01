@@ -9,6 +9,6 @@ import java.io.InvalidClassException;
  */
 
 public interface Savable {
-    public Object getSave();
-    public void restoreSave(Object save) throws InvalidClassException;
+    Object getSave();
+    void restoreSave(Object save) throws InvalidClassException;
 }

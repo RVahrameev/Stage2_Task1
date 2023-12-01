@@ -17,7 +17,7 @@ public class ObjectSavepoint {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj != null && obj instanceof ObjectSavepoint) {
+        if (obj instanceof ObjectSavepoint) {
             ObjectSavepoint sp = (ObjectSavepoint)obj;
             return (this.object == sp.object) && this.savePointName.equals(sp.savePointName);
         }

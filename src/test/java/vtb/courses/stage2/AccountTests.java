@@ -55,17 +55,19 @@ public class AccountTests {
         account.setOwner("Новый Владелец");
         Account accountOwner2 = account.clone();
         account.setAmount(Currency.CNY, 400);
+        Assertions.assertTrue(account.undoAvailable(), "Error in undoAvailable.");
         account.undo();
-        Assertions.assertEquals(accountOwner2, account, "Не удалось соверить откат к accountOwner2");
+        Assertions.assertEquals(accountOwner2, account, "Не удалось совершить откат к accountOwner2");
         account.undo();
-        Assertions.assertEquals(accountEur, account, "Не удалось соверить откат к accountEur");
+        Assertions.assertEquals(accountEur, account, "Не удалось совершить откат к accountEur");
         account.undo();
-        Assertions.assertEquals(accountUsd, account, "Не удалось соверить откат к accountUsd");
+        Assertions.assertEquals(accountUsd, account, "Не удалось совершить откат к accountUsd");
         account.undo();
-        Assertions.assertEquals(accountRub, account, "Не удалось соверить откат к accountRub");
+        Assertions.assertEquals(accountRub, account, "Не удалось совершить откат к accountRub");
         account.undo();
-        Assertions.assertEquals(accountOwner1, account, "Не удалось соверить откат к accountOwner1");
+        Assertions.assertEquals(accountOwner1, account, "Не удалось совершить откат к accountOwner1");
         Assertions.assertThrows(IllegalStateException.class, () -> account.undo(), "Не сгенерилось исключение при отсутствии возможности отката");
+        Assertions.assertFalse(account.undoAvailable(), "Error in undoAvailable.");
     }
 
     @Test

@@ -10,7 +10,7 @@ import java.util.HashMap;
  * остаётся на совести самих объектов реализующих интерфейс {@link Savable}
  */
 public class SavePoints {
-    private HashMap<ObjectSavepoint, Object> savepoints = new HashMap<>();
+    private final HashMap<ObjectSavepoint, Object> savepoints = new HashMap<>();
 
     public void addSavePoint(Savable object, String savepointName) {
         savepoints.put(new ObjectSavepoint(object, savepointName), object.getSave());

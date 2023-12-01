@@ -10,9 +10,9 @@ public enum Currency {
     USD("Доллар США"),
     EUR("Евро"),
     CNY("Юань");
-    private String rusName;
+    final private String rusName;
 
-    private Currency(String name) {
+    Currency(String name) {
         this.rusName = name;
     }
 
