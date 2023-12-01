@@ -1,5 +1,6 @@
 package vtb.courses.stage2;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -7,12 +8,13 @@ import java.io.InvalidClassException;
 import java.util.Stack;
 import java.util.function.Consumer;
 
-@ToString
+@ToString @EqualsAndHashCode
 public class Account implements Savable {
     @Getter
     protected String owner;
     private SubAccounts byCurrency;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private transient Stack<Consumer<Account>> undoList;
 
     public Account(String owner) {
@@ -31,7 +33,7 @@ public class Account implements Savable {
         if (undoList.empty()) {
             throw new IllegalStateException("Нечего откатывать!");
         }
-        undoList.pop().accept(this);
+       undoList.pop().accept(this);
     }
 
     public void setOwner(String owner) {
@@ -72,7 +74,6 @@ public class Account implements Savable {
     public void restoreSave(Object save) throws InvalidClassException {
         if (save instanceof Account) {
             Account savedAccount = (Account) save;
-
             this.owner = savedAccount.owner;
             this.byCurrency = savedAccount.byCurrency;
             this.undoList.clear();
@@ -81,4 +82,8 @@ public class Account implements Savable {
         }
     }
 
+    @Override
+    protected Account clone() {
+        return new Account(this);
+    }
 }
